@@ -1,0 +1,87 @@
+import java.io.*;
+import java.util.Scanner;
+class Comp_Op
+{
+float real,img;
+Comp_Op()
+{
+real=0;
+img=0;
+}
+Comp_Op(float CO1,float CO2)
+{
+real=CO1;
+img=CO2;
+}
+public void Add(Comp_Op CO1,Comp_Op CO2)
+{
+float real,img;
+real=(CO1.real+CO2.real);
+img=(CO1.img+CO2.img);
+System.out.println("Additon Is :"+real+"+"+img+"i");
+} 
+void Sub(Comp_Op CO1,Comp_Op CO2)
+{
+float real,img;
+real=(CO1.real-CO2.real);
+img=(CO1.img-CO2.img);
+System.out.println("Subtraction Is :"+real+"(+)"+img+"i");
+} 
+void Multiply(Comp_Op CO1,Comp_Op CO2)
+{
+float real,img;
+real=(CO1.real*CO2.real-CO1.img*CO2.img);
+img=(CO1.real*CO2.img+CO2.real*CO1.img);
+System.out.println("Multiplication Is :"+real+"+"+img+"i");
+} 
+void Divide(Comp_Op CO1,Comp_Op CO2)
+{
+float real,img,deno;
+deno=(CO2.real*CO2.real+CO2.img*CO2.img);
+real=(CO1.real*CO2.real+CO1.img*CO2.img)/deno;
+img=(CO2.real*CO1.img-CO1.real*CO2.img)/deno;
+System.out.println("Division Is :"+real+"+"+img+"i");
+}
+} //Class Complex_Op end
+public class Complex {
+public static void main(String[] args) {
+int ch=0;
+float num1,num2,ans; Comp_Op calc=new Comp_Op();
+Scanner input=new Scanner(System.in);
+System.out.println("Enter First Number :");
+num1=input.nextFloat();
+num2=input.nextFloat(); Comp_Op CO1=new Comp_Op(num1,num2);
+System.out.println("Enter Second Number :");
+num1=input.nextFloat();
+num2=input.nextFloat(); Comp_Op CO2=new Comp_Op(num1,num2);
+do
+{
+System.out.println("\n----------MENU----------");
+System.out.println(" 1.Add");
+System.out.println(" 2.Subtract");
+System.out.println(" 3.Multiply");
+System.out.println(" 4.Divide");
+System.out.println(" 5.Exit");
+System.out.println(" Enter Your Choice");
+ch=input.nextInt();
+switch(ch)
+{
+case 1:
+calc.Add(CO1,CO2);
+break;
+case 2:
+calc.Sub(CO1,CO2);
+break;
+case 3:
+calc.Multiply(CO1,CO2);
+break;
+case 4:
+calc.Divide(CO1,CO2);
+break;
+case 5:
+System.out.println("\n Exiting From Program!!!");
+break;
+} //switch end
+}while(ch!=5); //do-while end
+}
+} //main end

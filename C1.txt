@@ -1,0 +1,233 @@
+#include <iostream>
+#include<cstring>
+using namespace std;
+ 
+//1.Define structure
+ 
+typedef struct SEIT_student_Details
+{
+    int roll;        //4 bytes
+    char name[10];   //10 bytes
+    float SGPA;      //4 bytes
+}stud;
+ 
+ 
+//2 .Accept values from user
+void accept(stud s[],int n)//n=3
+{
+    int i;
+    cout<<"\n Enter student details(Roll,name,SGPA) ";
+    for(i=0;i<n;i++)                                          //i=0  s[0].roll s[0].name s[1].SGPA  ->>1 Meena 4.4
+        cin>>s[i].roll>>s[i].name>>s[i].SGPA;                //i=1 s[1].roll s[1].name s[1].SGPA
+                                                            //i=2 s[2].roll s[2].name s[2].SGPA
+}
+ 
+ 
+//3.Display details
+void display(stud s[],int n)//n=3
+{
+    int i;
+    cout<<"\n Sr.No.\t Roll Number\t Name\t SGPA"<<endl;
+    for(i=0;i<n;i++)
+        cout<<"\n i="<<i<<"\t"<<s[i].roll<<"\t"<<s[i].name<<"\t"<<s[i].SGPA;
+}
+ 
+//Function for linear search w.r.t. SGPA
+void lSearch(stud s[],int n,float key)
+{
+    int i=0,flag=0;
+    while(i<n)
+    {
+ 
+        if(key==s[i].SGPA)
+        {
+            cout<<"\nStudent Found at location "<<i<<endl;
+            cout<<s[i].roll<<"\t"<<s[i].name<<"\t"<<s[i].SGPA;
+            flag=1;
+        }
+        i++;
+    }
+    if(flag==0)
+            cout<<"\n Student not found";
+}
+ 
+int bsearch_name(stud s[],int n,char key1[])    //n=3  key1 =aaa
+{
+int l=0,h=n-1,m=0;
+ 
+while(l<=h)           //l=0 h=n-1=3-1=2//////  l=0 h=0
+{
+    m=(l+h)/2;         //m=0+2/2=1 //////  m=0+0/2=0
+    cout<<"\n m="<<m;
+ 
+    //return 0===same  -1===s1<s2      1=====s1>s2      0--aaa 1--bbb  2---ccc
+    if(strcmp(s[m].name, key1)==0)              //s[1].name===(bbb  ,aaa)  //////////s[0].name,aaa  (aaa,aaa)=0
+        return m;
+    else if(strcmp(s[m].name, key1)>0)
+        h=m-1;                                      //h=m-1===1-1=0
+    else
+        l=m+1;
+}
+ 
+return -1;
+}
+ 
+void bubblesort_roll(stud a[],int n)
+{
+    int i,j;
+    stud temp;
+    for(i=0;i<n-1;i++)//no. of passes
+        {
+            for(j=0;j<n-1;j++)//2 3 1 4
+                {
+                    if(a[j].roll>a[j+1].roll)//j=0 ->> 2>3     j=1  --->3 >1 after swapping 2  1 3 4    j=2--->3<4   passs1  i=0   2 1 3 4
+                    {
+                        temp=a[j];        //temp=3
+                        a[j]=a[j+1];  //a[j]=1
+                        a[j+1]=temp;       //a[j+1]=3
+                    }
+                }
+        }
+}
+ 
+ 
+void bubblesort_name(stud a[],int n)
+{
+    int i,j;
+    stud temp;
+ 
+    for(i=0;i<n-1;i++)
+        {
+            for(j=0;j<n-1;j++)
+                {
+                    if(strcmp(a[j].name,a[j+1].name)>0)
+                    {
+                        temp=a[j];
+                        a[j]=a[j+1];
+                        a[j+1]=temp;
+                    }
+                }
+        }
+}
+//found position for pivot
+int partition(stud a[],int l,int h)
+{
+    int i,j;
+    stud temp,pvt;
+ 
+    pvt=a[l]; //initially l=0 so pvt=a[0]
+    i=l+1;    //initially i=l+1=1
+    j=h;      //initially j=h
+ 
+    while(i<=j)
+    {
+        while(a[i].SGPA<=pvt.SGPA) //if smaller numbers than pivot then increament i
+        i++;
+ 
+        while(a[j].SGPA>pvt.SGPA)//if greater numbers than pivot then decrement j
+        j--;
+ 
+        if(i<j) //swap numbers
+        {
+            temp=a[i];
+            a[i]=a[j];
+            a[j]=temp;
+        }
+    }
+ 
+    a[l]=a[j]; //swap pvt with number
+    a[j]=pvt;
+ 
+    return j;//return pvt position
+}
+//Recursive Quick sort function for sorting students according SGPA
+void quick_sort(stud a[],int l,int h)
+{
+    int j;
+    if(l<h)
+    {
+        j=partition(a,l,h);
+        quick_sort(a,l,j-1);//call for left sub part
+        quick_sort(a,j+1,h);//call for right sub part
+    }
+}
+//Display last three students as topper
+void quick_display(stud s[],int n,int t)
+{
+    int i;
+    int cnt=1;
+ 
+    for(i=n;cnt<=t;i--)
+    {
+        cout<<"\n i="<<i<<"\t"<<s[i].roll<<"\t"<<s[i].name<<"\t"<<s[i].SGPA;
+        cnt++;
+    }
+}
+ 
+int main()
+{
+    int r,ch,n;
+        float key_sgpa;
+        stud s[10];
+        char key1[20];
+ 
+      //Accept student details
+        cout<<"\n Enter no. of students";
+        cin>>n;
+        accept(s,n);
+ 
+         //Display student details
+        cout<<"\n Entered student details ";
+        display(s,n);
+ 
+ 
+        while(1)//always true
+        {
+                //Display Menu
+                cout<<"\n Menu";
+                cout<<"\n1.Liner search for SGPA\n2.Binary Search with name \n3.Bubble sort wrt roll no.\n 4.Bubble sort wrt Name \n5.Quick sort for toppers\n6.exit";
+                //Accept choice from user
+                cout<<"\n Enter your choice";
+                cin>>ch;
+ 
+                switch(ch)
+                {
+                case 1:cout<<"\n Enter key (SGPA) to search";//Linear search
+                        cin>>key_sgpa;
+                        lSearch(s,n,key_sgpa);
+                        break;
+                case 2:
+                      cout<<"\n Enter key(Name) to search";//Binary search
+                      cin>>key1;
+                      r=bsearch_name(s,n,key1);
+                                if(r==-1)
+                                    cout<<"\n Key not found"<<endl;
+                                else
+                                    cout<<key1<<" found at location"<<r;
+                        break;
+ 
+                case 3:
+                       bubblesort_roll(s,n);
+                        cout<<"\n After sorting on roll number details as below";
+                        display(s,n);
+                        break;
+ 
+ 
+                case 4:
+                        bubblesort_name(s,n);
+                        cout<<"\n After sorting on name details as below";
+                        display(s,n);
+                        break;
+ 
+                case 5:
+                                quick_sort(s,0,n-1);
+                                cout<<"\n After sorting according SGPA :Toppers";
+ 
+                                quick_display(s,n-1,3);
+               case 6:
+                                exit(0);
+                }
+            }
+        return 0;
+        }
+
